@@ -6,10 +6,10 @@ const InputForms = ({rtcClient}) => {
   if (rtcClient === null) return <></>;
 
   return (
-    <div>
+    <>
       <InputFormLocal rtcClient={rtcClient} />
       <InputFormRemote rtcClient={rtcClient} />
-    </div>
+    </>
   );
 };
 

@@ -87,7 +87,7 @@ export default function InputFormLocal({ rtcClient }) {
               if (e.target.value === "") return;
               if (e.key === "Enter") {
                 initializeLocalPeer(e);
-                setName(e.target.value);
+                // setName(e.target.value);
               }
             }}
             onCompositionStart={() => {

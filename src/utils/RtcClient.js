@@ -75,11 +75,11 @@ export default class RtcClient {
   }
 
   async sendOffer() {
-    this.firebaseSignalingClientC.setPeerNames(
+    this.firebaseSignalingClient.setPeerNames(
       this.localPeerName,
       this.remotePeerName
     );
-    await this.firebaseSignalingClient(this.localDescription)
+    await this.firebaseSignalingClient.sendOffer(this.localDescription);
   }
 
   setOnTrack() {
@@ -92,12 +92,40 @@ export default class RtcClient {
     this.setRtcClient();
   }
 
+  async answer(sender, sessionDescription) {
+    try {
+      this.remotePeerNaqme = sender;
+      this.setOniceCandidateCallback();
+      this.setOnTrack();
+      await this.setRemoteDescription(sessionDescription);
+      const answer = this.rtcPeerConnection.createAnswer();
+      this.rtcPeerConnection.setLocalDescription(answer);
+      console.log(answer)
+      await this.sendAnswer();
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
   async connect(remotePeerName) {
     this.remotePeerName = remotePeerName;
     this.setOniceCandidateCallback();
     this.setOnTrack();
     await this.offer();
     this.setRtcClient();
+  }
+
+  async setRemoteDescription(sessionDescription) {
+    await this.rtcPeerConnection.setRemoteDescription(sessionDescription);
+  }
+
+  async sendAnswer() {
+    this.firebaseSignalingClient.setPeerNames(
+      this.localPeerName,
+      this.remotePeername
+    );
+
+    await this.firebaseSignalingClient.sendAnswer(this.localDescription);
   }
 
   get localDescription() {
@@ -117,8 +145,16 @@ export default class RtcClient {
     this.setRtcClient();
     this.firebaseSignalingClient.database
       .ref(localPeerName)
-      .on("value", (snapshot) => {
+      .on("value", async (snapshot) => {
         const data = snapshot.val();
+        if (data === null) return;
+        const { sender, sessionDescription, type } = data;
+        switch (type) {
+          case "offer":
+            await this.answer(sender, sessionDescription);
+          default:
+            break;
+        }
       });
   }
 }

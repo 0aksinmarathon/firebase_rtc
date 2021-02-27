@@ -20,19 +20,26 @@ export default class FirebaseSignalingClient {
     this.remotePeerName = "";
   }
 
-  setPeerName(localPeerName, remotePeerName) {
+  setPeerNames(localPeerName, remotePeerName) {
     this.localPeerName = localPeerName;
     this.remotePeerName = remotePeerName;
   }
 
   get targetRef() {
-    return this.databse.ref(this.remotePeerName);
+    return this.database.ref(this.remotePeerName);
   }
 
   async sendOffer(sessionDescription) {
-    this.targetRef = this.databse.ref(this.remotePeerName);
-    await targetRef.set({
+    await this.targetRef.set({
       type: "offer",
+      sender: this.localPeerName,
+      sessionDescription,
+    });
+  }
+
+  async sendAnswer(sessionDescription) {
+    await this.targetRef.set({
+      type: "answer",
       sender: this.localPeerName,
       sessionDescription,
     });

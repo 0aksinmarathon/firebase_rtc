@@ -83,7 +83,7 @@ export default function InputFormRemote({ rtcClient }) {
             name="name"
             autoFocus
             onChange={(e) => setName(e.target.value)}
-            onKeyDown={(e) => {
+            onKeyDown={async (e) => {
               if (isComposed) return;
               if (e.target.value === "") return;
               if (e.key === "Enter") await initializeRemotePeer(e)
