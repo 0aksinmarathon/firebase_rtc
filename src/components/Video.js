@@ -9,6 +9,7 @@ import {
 
 import useDimensions from "./hooks/useDimensions";
 import VolumeButton from "./VolumeButton";
+import AudioAnalyser from "./AudioAnalyser";
 
 const Video = ({ name, videoRef, rtcClient, isLocal }) => {
   const [muted, setMuted] = useState(rtcClient.initialAudioMuted);
@@ -32,7 +33,15 @@ const Video = ({ name, videoRef, rtcClient, isLocal }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <VolumeButton isLocal={isLocal} muted={muted} rtcClient={rtcClient} setMuted={setMuted} />
+        <VolumeButton
+          isLocal={isLocal}
+          muted={muted}
+          rtcClient={rtcClient}
+          setMuted={setMuted}
+        />
+        {!muted && videoRef.current && videoRef.current.srcObject && (
+          <AudioAnalyser audio={videoRef.current.srcObject} />
+        )}
       </CardActions>
     </Card>
   );
