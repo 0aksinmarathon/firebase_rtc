@@ -8,10 +8,10 @@ const App = () => {
   const rtcClient = useRtcClient();
   console.log({ rtcClient });
   return (
-    <div>
+    <>
       <InputForms rtcClient={rtcClient} />
       <VideoArea rtcClient={rtcClient} />
-    </div>
+    </>
   );
 };
 

@@ -3,29 +3,15 @@ import Video from "./Video";
 
 const VideoRemote = ({ rtcClient }) => {
   const videoRef = rtcClient.remoteVideoRef;
-  //   const currentVideoRef = videoRef.current;
-  //   useEffect(() => {
-  //     if (currentVideoRef === null) return;
-  //     const getMedia = async () => {
-  //       const constraints = { audio: true, video: true };
+  console.log(videoRef)
 
-  //       try {
-  //         const mediaStream = await navigator.mediaDevices.getUserMedia(
-  //           constraints
-  //         );
-  //         currentVideoRef.srcObject = mediaStream;
-  //       } catch (err) {
-  //         console.error(err);
-  //       }
-
-  //     };
-  //     getMedia();
-  //   }, [currentVideoRef]);
+  if (rtcClient.remotePeerName === "") return <></>;
 
   return (
     <Video
       isLocal={false}
       name={rtcClient.remotePeerName}
+      rtcClient={rtcClient}
       videoRef={videoRef}
     />
   );

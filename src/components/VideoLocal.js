@@ -7,7 +7,7 @@ const VideoLocal = ({ rtcClient }) => {
   const mediaStream = rtcClient.mediaStream;
   useEffect(() => {
     if (currentVideoRef === null) return;
-    const getMedia = async () => {
+    const getMedia = () => {
       try {
         currentVideoRef.srcObject = mediaStream;
       } catch (err) {
@@ -15,10 +15,18 @@ const VideoLocal = ({ rtcClient }) => {
       }
     };
     getMedia();
-  }, [currentVideoRef]);
+  }, [currentVideoRef, mediaStream]);
 
+  if (rtcClient.localPeerName === "" || rtcClient.remotePeerName === "")
+    return <></>;
+  console.log(videoRef);
   return (
-    <Video isLocal={true} name={rtcClient.localPeerName} videoRef={videoRef} />
+    <Video
+      isLocal={true}
+      name={rtcClient.localPeerName}
+      rtcClient={rtcClient}
+      videoRef={videoRef}
+    />
   );
 };
 

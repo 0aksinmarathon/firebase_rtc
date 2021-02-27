@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function InputFormLocal({ rtcClient }) {
+export default function SignIn({ rtcClient }) {
   const classes = useStyles();
   const [disabled, setDisabled] = useState(true);
   const [name, setName] = useState("");
@@ -57,7 +57,6 @@ export default function InputFormLocal({ rtcClient }) {
   const initializeLocalPeer = useCallback(
     async (e) => {
       await rtcClient.startListening(name);
-      console.log("asdckhb")
       e.preventDefault();
     },
     [name, rtcClient]
@@ -78,7 +77,6 @@ export default function InputFormLocal({ rtcClient }) {
             margin="normal"
             required
             fullWidth
-            id="name"
             label="あなたの名前"
             name="name"
             autoFocus
@@ -86,9 +84,7 @@ export default function InputFormLocal({ rtcClient }) {
             onKeyDown={async (e) => {
               if (isComposed) return;
               if (e.target.value === "") return;
-              if (e.key === "Enter") {
-                await initializeLocalPeer(e);
-              }
+              if (e.key === "Enter") await initializeLocalPeer(e);
             }}
             onCompositionStart={() => {
               setIsComposed(true);
@@ -105,9 +101,7 @@ export default function InputFormLocal({ rtcClient }) {
             color="primary"
             className={classes.submit}
             disabled={disabled}
-            onClick={async (e) => {
-              await initializeLocalPeer(e);
-            }}
+            onClick={async (e) => await initializeLocalPeer(e)}
           >
             Sign In
           </Button>
