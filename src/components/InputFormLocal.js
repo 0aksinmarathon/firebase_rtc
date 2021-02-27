@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function InputFormLocal({ localPeerName, setLocalPeerName }) {
+export default function InputFormLocal({ rtcClient }) {
   const classes = useStyles();
   const [disabled, setDisabled] = useState(true);
   const [name, setName] = useState("");
@@ -56,13 +56,16 @@ export default function InputFormLocal({ localPeerName, setLocalPeerName }) {
 
   const initializeLocalPeer = useCallback(
     (e) => {
-      setLocalPeerName(name);
+      rtcClient.localPeerName = name;
+
+      rtcClient.setRtcClient(rtcClient);
+      console.log({ rtcClient });
       e.preventDefault();
     },
-    [name, setLocalPeerName]
+    [name, rtcClient]
   );
 
-  if (localPeerName !== "") return <></>;
+  if (rtcClient.localPeerName !== "") return <></>;
 
   return (
     <Container component="main" maxWidth="xs">
