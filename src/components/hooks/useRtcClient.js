@@ -1,8 +1,9 @@
-import React, { useReducer, useState, useEffect } from "react";
+import { useReducer, useState, useEffect, useRef } from "react";
 import RtcClient from "../../utils/RtcClient";
 
 const useRtcClient = () => {
   const [rtcClient, _setRtcClient] = useState(null);
+  const remoteVideoRef = useRef();
   const [, forceRender] = useReducer((boolean) => !boolean, false);
 
   // re_renderを助けるための関数
@@ -13,9 +14,8 @@ const useRtcClient = () => {
 
   useEffect(() => {
     const init = async () => {
-      const client = new RtcClient(setRtcClient);
-      await client.getUserMedia();
-      client.setRtcClient();
+      const client = new RtcClient(remoteVideoRef, setRtcClient);
+      await client.setMediaStream();
     };
     init();
   }, []);

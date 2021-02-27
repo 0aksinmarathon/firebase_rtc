@@ -1,28 +1,34 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import Video from "./Video";
 
-const VideoRemote = ({name}) => {
-  const videoRef = null;
-//   const currentVideoRef = videoRef.current;
-//   useEffect(() => {
-//     if (currentVideoRef === null) return;
-//     const getMedia = async () => {
-//       const constraints = { audio: true, video: true };
+const VideoRemote = ({ rtcClient }) => {
+  const videoRef = rtcClient.remoteVideoRef;
+  //   const currentVideoRef = videoRef.current;
+  //   useEffect(() => {
+  //     if (currentVideoRef === null) return;
+  //     const getMedia = async () => {
+  //       const constraints = { audio: true, video: true };
 
-//       try {
-//         const mediaStream = await navigator.mediaDevices.getUserMedia(
-//           constraints
-//         );
-//         currentVideoRef.srcObject = mediaStream;
-//       } catch (err) {
-//         console.error(err);
-//       }
-      
-//     };
-//     getMedia();
-//   }, [currentVideoRef]);
+  //       try {
+  //         const mediaStream = await navigator.mediaDevices.getUserMedia(
+  //           constraints
+  //         );
+  //         currentVideoRef.srcObject = mediaStream;
+  //       } catch (err) {
+  //         console.error(err);
+  //       }
 
-  return <Video isLocal={false} name={name} videoRef={videoRef} />;
+  //     };
+  //     getMedia();
+  //   }, [currentVideoRef]);
+
+  return (
+    <Video
+      isLocal={false}
+      name={rtcClient.remotePeerName}
+      videoRef={videoRef}
+    />
+  );
 };
 
 export default VideoRemote;

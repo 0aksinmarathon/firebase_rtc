@@ -55,9 +55,8 @@ export default function InputFormRemote({ rtcClient }) {
   }, [name]);
 
   const initializeRemotePeer = useCallback(
-    (e) => {
-      rtcClient.remotePeerName = name;
-      rtcClient.setRtcClient(rtcClient);
+    async (e) => {
+      await rtcClient.connect(name)
       e.preventDefault();
     },
     [name, rtcClient]
@@ -87,10 +86,7 @@ export default function InputFormRemote({ rtcClient }) {
             onKeyDown={(e) => {
               if (isComposed) return;
               if (e.target.value === "") return;
-              if (e.key === "Enter") {
-                e.preventDefault();
-                setName(e.target.value);
-              }
+              if (e.key === "Enter") await initializeRemotePeer(e)
             }}
             onCompositionStart={() => {
               setIsComposed(true);
@@ -107,9 +103,7 @@ export default function InputFormRemote({ rtcClient }) {
             color="primary"
             className={classes.submit}
             disabled={disabled}
-            onClick={(e) => {
-              initializeRemotePeer(e);
-            }}
+            onClick={async (e) => await initializeRemotePeer(e)}
           >
             Sign In
           </Button>
