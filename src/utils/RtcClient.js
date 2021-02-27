@@ -100,9 +100,9 @@ export default class RtcClient {
       await this.setRemoteDescription(sessionDescription);
       const answer = this.rtcPeerConnection.createAnswer();
       this.rtcPeerConnection.setLocalDescription(answer);
-      console.log(answer)
+      console.log(answer);
       await this.sendAnswer();
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
   }
@@ -132,6 +132,14 @@ export default class RtcClient {
     return this.rtcPeerConnection.localDescription.toJSON();
   }
 
+  async saveReceivedSessionDescription(sessionDescription) {
+    try {
+      await this.setRemoteDescription(sessionDescription);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   setOniceCandidateCallback() {
     this.rtcPeerConnection.onicecandidate = ({ candidate }) => {
       if (candidate) {
@@ -140,9 +148,10 @@ export default class RtcClient {
     };
   }
 
-  startListening(localPeerName) {
+  async tartListening(localPeerName) {
     this.localPeerName = localPeerName;
     this.setRtcClient();
+    await this.firebaseSignalingClient.remove(localPeerName);
     this.firebaseSignalingClient.database
       .ref(localPeerName)
       .on("value", async (snapshot) => {
@@ -152,6 +161,8 @@ export default class RtcClient {
         switch (type) {
           case "offer":
             await this.answer(sender, sessionDescription);
+          case "answer":
+            await this.saveReceivedSessionDescription(sessionDescription);
           default:
             break;
         }

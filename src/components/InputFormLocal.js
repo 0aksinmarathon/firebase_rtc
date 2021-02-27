@@ -55,8 +55,8 @@ export default function InputFormLocal({ rtcClient }) {
   }, [name]);
 
   const initializeLocalPeer = useCallback(
-    (e) => {
-      rtcClient.startListening(name);  
+    async (e) => {
+      await rtcClient.startListening(name);  
       e.preventDefault();
     },
     [name, rtcClient]
@@ -82,11 +82,11 @@ export default function InputFormLocal({ rtcClient }) {
             name="name"
             autoFocus
             onChange={(e) => setName(e.target.value)}
-            onKeyDown={(e) => {
+            onKeyDown={async (e) => {
               if (isComposed) return;
               if (e.target.value === "") return;
               if (e.key === "Enter") {
-                initializeLocalPeer(e);
+                await initializeLocalPeer(e);
                 // setName(e.target.value);
               }
             }}
@@ -105,8 +105,8 @@ export default function InputFormLocal({ rtcClient }) {
             color="primary"
             className={classes.submit}
             disabled={disabled}
-            onClick={(e) => {
-              initializeLocalPeer(e);
+            onClick={async (e) => {
+              await initializeLocalPeer(e);
             }}
           >
             Sign In

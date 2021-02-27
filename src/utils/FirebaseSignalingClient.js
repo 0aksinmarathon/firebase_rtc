@@ -44,4 +44,8 @@ export default class FirebaseSignalingClient {
       sessionDescription,
     });
   }
+
+  async remove(path){
+      await this.databse.ref(path).remove()
+  }
 }
