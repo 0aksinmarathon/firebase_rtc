@@ -97,7 +97,7 @@ export default function InputFormRemote({ rtcClient }) {
             value={name}
           />
           <Button
-            type="button"
+            type="submit"
             fullWidth
             variant="contained"
             color="primary"

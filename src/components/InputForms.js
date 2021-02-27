@@ -2,7 +2,7 @@ import React from "react";
 import InputFormLocal from "./InputFormLocal";
 import InputFormRemote from "./InputFormRemote";
 
-const InputForms = ({rtcClient}) => {
+const InputForms = ({ rtcClient }) => {
   if (rtcClient === null) return <></>;
 
   return (

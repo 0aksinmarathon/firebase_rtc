@@ -10,7 +10,6 @@ const App = () => {
   return (
     <div>
       <InputForms rtcClient={rtcClient} />
-      {/* <VideoArea rtcClient={rtcClient} forceRender={forceRender} /> */}
       <VideoArea rtcClient={rtcClient} />
     </div>
   );

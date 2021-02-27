@@ -94,12 +94,12 @@ export default class RtcClient {
 
   async answer(sender, sessionDescription) {
     try {
-      this.remotePeerNaqme = sender;
+      this.remotePeerName = sender;
       this.setOniceCandidateCallback();
       this.setOnTrack();
       await this.setRemoteDescription(sessionDescription);
       const answer = this.rtcPeerConnection.createAnswer();
-      this.rtcPeerConnection.setLocalDescription(answer);
+      await this.rtcPeerConnection.setLocalDescription(answer);
       console.log(answer);
       await this.sendAnswer();
     } catch (e) {
@@ -141,14 +141,15 @@ export default class RtcClient {
   }
 
   setOniceCandidateCallback() {
-    this.rtcPeerConnection.onicecandidate = ({ candidate }) => {
+    this.rtcPeerConnection.onicecandidate = async ({ candidate }) => {
       if (candidate) {
-        //remoteへcandidtaeを通知
+        console.log({candidate})
+        await this.firebaseSignalingClient.sendCandidate(candidate.toJSON());
       }
     };
   }
 
-  async tartListening(localPeerName) {
+  async startListening(localPeerName) {
     this.localPeerName = localPeerName;
     this.setRtcClient();
     await this.firebaseSignalingClient.remove(localPeerName);

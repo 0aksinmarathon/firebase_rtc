@@ -56,7 +56,8 @@ export default function InputFormLocal({ rtcClient }) {
 
   const initializeLocalPeer = useCallback(
     async (e) => {
-      await rtcClient.startListening(name);  
+      await rtcClient.startListening(name);
+      console.log("asdckhb")
       e.preventDefault();
     },
     [name, rtcClient]
@@ -87,7 +88,6 @@ export default function InputFormLocal({ rtcClient }) {
               if (e.target.value === "") return;
               if (e.key === "Enter") {
                 await initializeLocalPeer(e);
-                // setName(e.target.value);
               }
             }}
             onCompositionStart={() => {
