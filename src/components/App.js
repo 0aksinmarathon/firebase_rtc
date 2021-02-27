@@ -3,18 +3,7 @@ import InputFormLocal from "./InputFormLocal";
 import InputFormRemote from "./InputFormRemote";
 import VideoArea from "./VideoArea";
 
-const getMedia = async () => {
-  const constraints = { audio: true, video: true };
 
-  let stream = null;
-
-  try {
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    /* use the stream */
-  } catch (err) {
-    /* handle the error */
-  }
-};
 
 const App = () => {
   const [localPeerName, setLocalPeerName] = useState("");
