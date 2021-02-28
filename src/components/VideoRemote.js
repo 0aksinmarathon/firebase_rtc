@@ -3,7 +3,6 @@ import Video from "./Video";
 
 const VideoRemote = ({ rtcClient }) => {
   const videoRef = rtcClient.remoteVideoRef;
-  console.log(videoRef)
 
   if (rtcClient.remotePeerName === "") return <></>;
 

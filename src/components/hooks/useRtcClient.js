@@ -11,7 +11,7 @@ const useRtcClient = () => {
     _setRtcClient(rtcClient);
     forceRender();
   };
-  console.log(remoteVideoRef);
+
   useEffect(() => {
     const init = async () => {
       const client = new RtcClient(remoteVideoRef, setRtcClient);

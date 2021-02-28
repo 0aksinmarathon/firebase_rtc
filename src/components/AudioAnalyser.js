@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import AudioVisualiser from './AudioVisualiser';
+import React, { Component } from "react";
+import AudioVisualiser from "./AudioVisualiser";
 
 class AudioAnalyser extends Component {
   constructor(props) {
@@ -31,7 +31,12 @@ class AudioAnalyser extends Component {
   }
 
   render() {
-    return <AudioVisualiser audioData={this.state.audioData} />;
+    return (
+      <AudioVisualiser
+        audioData={this.state.audioData}
+        width={this.props.width}
+      />
+    );
   }
 }
 

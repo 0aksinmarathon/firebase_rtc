@@ -3,18 +3,27 @@ import "firebase/database";
 
 export default class FirebaseSignalingClient {
   constructor() {
+    const {
+      REACT_APP_FIREBASE_API_KEY,
+      REACT_APP_FIREBASE_AUTH_DOMAIN,
+      REACT_APP_FIREBASE_DATABASE_URL,
+      REACT_APP_FIREBASE_PROJECT_ID,
+      REACT_APP_FIREBASE_STORAGE_BUCKET,
+      REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+      REACT_APP_FIREBASE_APP_ID,
+    } = process.env;
+    
     const firebaseConfig = {
-      apiKey: "AIzaSyDPbhsB_mrNdnHpZ3cRjPJvyyNom8P6uy0",
-      authDomain: "fir-rtc-2960f.firebaseapp.com",
-      databaseURL: "https://fir-rtc-2960f-default-rtdb.firebaseio.com",
-      projectId: "fir-rtc-2960f",
-      storageBucket: "fir-rtc-2960f.appspot.com",
-      messagingSenderId: "626596140890",
-      appId: "1:626596140890:web:26f4a59ba67d58420e4563",
+      apiKey: REACT_APP_FIREBASE_API_KEY,
+      authDomain: REACT_APP_FIREBASE_AUTH_DOMAIN,
+      databaseURL: REACT_APP_FIREBASE_DATABASE_URL,
+      projectId: REACT_APP_FIREBASE_PROJECT_ID,
+      storageBucket: REACT_APP_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+      appId: REACT_APP_FIREBASE_APP_ID,
     };
-    if (firebase.apps.length === 0) {
-      firebase.initializeApp(firebaseConfig);
-    }
+    if (firebase.apps.length === 0) firebase.initializeApp(firebaseConfig);
+
     this.database = firebase.database();
     this.localPeerName = "";
     this.remotePeerName = "";

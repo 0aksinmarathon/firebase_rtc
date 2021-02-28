@@ -1,16 +1,16 @@
-import FirebaseSignalingClient from "./FirebaseSignalingClient";
+import FirebaseSignallingClient from './FirebaseSignallingClient';
 
 const INITIAL_AUDIO_ENABLED = false;
 
 export default class RtcClient {
   constructor(remoteVideoRef, setRtcClient) {
     const config = {
-      iceServers: [{ urls: "stun:stun.stunprotocol.org" }],
+      iceServers: [{ urls: 'stun:stun.stunprotocol.org' }],
     };
     this.rtcPeerConnection = new RTCPeerConnection(config);
-    this.firebaseSignalingClient = new FirebaseSignalingClient();
-    this.localPeerName = "";
-    this.remotePeerName = "";
+    this.firebaseSignallingClient = new FirebaseSignallingClient();
+    this.localPeerName = '';
+    this.remotePeerName = '';
     this.remoteVideoRef = remoteVideoRef;
     this._setRtcClient = setRtcClient;
     this.mediaStream = null;
@@ -89,17 +89,17 @@ export default class RtcClient {
   }
 
   async sendOffer() {
-    this.firebaseSignalingClient.setPeerNames(
+    this.firebaseSignallingClient.setPeerNames(
       this.localPeerName,
       this.remotePeerName
     );
 
-    await this.firebaseSignalingClient.sendOffer(this.localDescription);
+    await this.firebaseSignallingClient.sendOffer(this.localDescription);
   }
 
-  setOnTrack() {
+  setOntrack() {
     this.rtcPeerConnection.ontrack = (rtcTrackEvent) => {
-      if (rtcTrackEvent.track.kind !== "video") return;
+      if (rtcTrackEvent.track.kind !== 'video') return;
 
       const remoteMediaStream = rtcTrackEvent.streams[0];
       this.remoteVideoRef.current.srcObject = remoteMediaStream;
@@ -112,8 +112,8 @@ export default class RtcClient {
   async answer(sender, sessionDescription) {
     try {
       this.remotePeerName = sender;
-      this.setOniceCandidateCallback();
-      this.setOnTrack();
+      this.setOnicecandidateCallback();
+      this.setOntrack();
       await this.setRemoteDescription(sessionDescription);
       const answer = await this.rtcPeerConnection.createAnswer();
       await this.rtcPeerConnection.setLocalDescription(answer);
@@ -125,8 +125,8 @@ export default class RtcClient {
 
   async connect(remotePeerName) {
     this.remotePeerName = remotePeerName;
-    this.setOniceCandidateCallback();
-    this.setOnTrack();
+    this.setOnicecandidateCallback();
+    this.setOntrack();
     await this.offer();
     this.setRtcClient();
   }
@@ -136,12 +136,12 @@ export default class RtcClient {
   }
 
   async sendAnswer() {
-    this.firebaseSignalingClient.setPeerNames(
+    this.firebaseSignallingClient.setPeerNames(
       this.localPeerName,
       this.remotePeerName
     );
 
-    await this.firebaseSignalingClient.sendAnswer(this.localDescription);
+    await this.firebaseSignallingClient.sendAnswer(this.localDescription);
   }
 
   async saveReceivedSessionDescription(sessionDescription) {
@@ -155,7 +155,7 @@ export default class RtcClient {
   get localDescription() {
     return this.rtcPeerConnection.localDescription.toJSON();
   }
-  
+
   async addIceCandidate(candidate) {
     try {
       const iceCandidate = new RTCIceCandidate(candidate);
@@ -165,10 +165,10 @@ export default class RtcClient {
     }
   }
 
-  setOniceCandidateCallback() {
+  setOnicecandidateCallback() {
     this.rtcPeerConnection.onicecandidate = async ({ candidate }) => {
       if (candidate) {
-        await this.firebaseSignalingClient.sendCandidate(candidate.toJSON());
+        await this.firebaseSignallingClient.sendCandidate(candidate.toJSON());
       }
     };
   }
@@ -176,22 +176,22 @@ export default class RtcClient {
   async startListening(localPeerName) {
     this.localPeerName = localPeerName;
     this.setRtcClient();
-    await this.firebaseSignalingClient.remove(localPeerName);
-    this.firebaseSignalingClient.database
+    await this.firebaseSignallingClient.remove(localPeerName);
+    this.firebaseSignallingClient.database
       .ref(localPeerName)
-      .on("value", async (snapshot) => {
+      .on('value', async (snapshot) => {
         const data = snapshot.val();
         if (data === null) return;
 
         const { candidate, sender, sessionDescription, type } = data;
         switch (type) {
-          case "offer":
+          case 'offer':
             await this.answer(sender, sessionDescription);
             break;
-          case "answer":
+          case 'answer':
             await this.saveReceivedSessionDescription(sessionDescription);
             break;
-          case "candidate":
+          case 'candidate':
             await this.addIceCandidate(candidate);
             break;
           default:

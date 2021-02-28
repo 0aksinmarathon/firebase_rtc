@@ -15,7 +15,8 @@ const Video = ({ name, videoRef, rtcClient, isLocal }) => {
   const [muted, setMuted] = useState(rtcClient.initialAudioMuted);
   const refCard = useRef(null);
   const dimensionsCard = useDimensions(refCard);
-
+  const refVolumeButton = useRef(null);
+  const dimensionsVolumeButton = useDimensions(refVolumeButton);
   return (
     <Card ref={refCard}>
       <CardActionArea>
@@ -24,7 +25,6 @@ const Video = ({ name, videoRef, rtcClient, isLocal }) => {
           ref={videoRef}
           muted={isLocal || muted}
           width={dimensionsCard.width}
-          height={dimensionsCard.height}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
@@ -38,9 +38,13 @@ const Video = ({ name, videoRef, rtcClient, isLocal }) => {
           muted={muted}
           rtcClient={rtcClient}
           setMuted={setMuted}
+          refVolumeButton={refVolumeButton}
         />
         {!muted && videoRef.current && videoRef.current.srcObject && (
-          <AudioAnalyser audio={videoRef.current.srcObject} />
+          <AudioAnalyser
+            audio={videoRef.current.srcObject}
+            width={dimensionsCard.width - dimensionsVolumeButton.width - 40}
+          />
         )}
       </CardActions>
     </Card>
